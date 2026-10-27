@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ujian Sekolah - Informatika</title>
+  <style>
+    :root{
+      --bg-dark:#0d1b2a;
+      --bg-mid:#13293d;
+      --navy:#1f3a5f;
+      --gold:#d4af37;
+      --primary:#2d6cdf;
+      --primary-dark:#163d7d;
+      --success:#1f9d68;
+      --danger:#d94b5d;
+      --white:#ffffff;
+      --silver:#eef3fa;
+      --text:#182634;
+      --muted:#586879;
+      --border:#d9e2ee;
+      --overlay: rgba(8, 15, 28, 0.9);
+    }
+
+    *{ box-sizing:border-box; }
+
+    html, body{
+      margin:0;
+      width:100%;
+      height:100%;
+      overflow-x:hidden;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-mid));
+      color:var(--text);
+      user-select:none;
+      -webkit-user-select:none;
+      -ms-user-select:none;
+      -webkit-touch-callout:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    body{
+      min-height:100vh;
+    }
+
+    .app{
+      max-width: 1180px;
+      margin: 22px auto 40px;
+      padding: 12px 18px 30px;
+    }
+
+    .header{
+      background: linear-gradient(135deg, var(--navy), var(--primary-dark));
+      color: var(--white);
+      border-radius: 18px;
+      padding: 18px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      box-shadow: 0 12px 26px rgba(10, 17, 30, 0.35);
+      border: 1px solid rgba(255,255,255,0.08);
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+    }
+
+    .school-name{
+      font-size: 0.88rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+
+    .title{
+      margin:0;
+      font-size: clamp(1.5rem, 2vw, 2.3rem);
+      font-weight:800;
+      letter-spacing: 0.5px;
+    }
+
+    .sub{
+      margin: 4px 0 0;
+      opacity: 0.9;
+      font-size: 0.92rem;
+    }
+
+    .timer-box{
+      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.16);
+      border-radius: 14px;
+      min-width: 180px;
+      text-align:center;
+      padding: 12px 16px;
+    }
+
+    .timer-label{
+      display:block;
+      font-size:0.72rem;
+      letter-spacing:1.4px;
+      text-transform:uppercase;
+      opacity:0.85;
+    }
+
+    .timer{
+      font-size: clamp(1.5rem, 2vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .card{
+      background: var(--white);
+      border-radius: 18px;
+      box-shadow: 0 14px 28px rgba(12, 18, 29, 0.18);
+      padding: 22px 22px 18px;
+      border:1px solid var(--border);
+      margin-top: 20px;
+    }
+
+    .section-title{
+      font-size:1.3rem;
+      font-weight:800;
+      margin: 0 0 16px;
+      color: var(--navy);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    label{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      font-weight:700;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    input[type="text"], select{
+      width:100%;
+      padding: 12px 14px;
+      border:1.5px solid var(--border);
+      border-radius: 12px;
+      outline:none;
+      background:#f8fbff;
+      font-size:1rem;
+      color: var(--text);
+      transition: 0.2s ease;
+    }
+
+    input[type="text"]:focus, select:focus{
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(45,108,223,0.12);
+    }
+
+    .question-card{
+      background:#fff;
+      border-left: 6px solid var(--primary);
+      border-radius: 18px;
+      padding: 20px 18px 18px;
+      border:1px solid var(--border);
+      box-shadow: 0 10px 20px rgba(19, 32, 53, 0.08);
+      margin-top: 18px;
+    }
+
+    .q-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 12px;
+    }
+
+    .q-badge{
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-weight:800;
+      font-size: 0.76rem;
+      letter-spacing:0.8px;
+    }
+
+    .question{
+      font-size:1.05rem;
+      line-height:1.7;
+      margin:0;
+      font-weight:700;
+      color: var(--text);
+    }
+
+    .options{
+      margin-top: 16px;
+      display:grid;
+      gap: 11px;
+    }
+
+    .option{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border:1.5px solid var(--border);
+      background: #f7faff;
+      cursor:pointer;
+      transition:0.2s ease;
+    }
+
+    .option:hover{
+      border-color: var(--primary);
+      background: #edf4ff;
+    }
+
+    .option input{
+      margin-top: 2px;
+      accent-color: var(--primary);
+      width:18px;
+      height:18px;
+      flex-shrink:0;
+    }
+
+    .option-label{
+      font-weight:700;
+      color: var(--text);
+    }
+
+    .submit-wrap{
+      display:flex;
+      justify-content:center;
+      margin-top: 28px;
+      margin-bottom: 8px;
+    }
+
+    #submitBtn{
+      display:none;
+    }
+
+    .note{
+      text-align:center;
+      color:#d9ebff;
+      font-size:0.85rem;
+      opacity:0.9;
+      margin-top:2px;
+    }
+
+    .lock-overlay{
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:99999;
+      padding: 18px;
+    }
+
+    .lock-overlay.show{
+      display:flex;
+    }
+
+    .lock-box{
+      max-width: 480px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align:center;
+      color: var(--white);
+      box-shadow: 0 18px 34px rgba(0,0,0,0.3);
+    }
+
+    .lock-box h2{
+      margin:0 0 10px;
+      font-size: clamp(1.5rem, 2vw, 2rem);
+    }
+
+    .lock-box p{
+      margin:0;
+      line-height:1.8;
+      color:#eaf2ff;
+      font-size:0.98rem;
+    }
+
+    @media (max-width: 720px){
+      .header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .timer-box{
+        width:100%;
+      }
+
+      .app{
+        padding: 10px 12px 25px;
+      }
+
+      .question-card{
+        padding: 16px 14px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div>
+        <div class="school-name">Ujian Sekolah</div>
+        <h1 class="title">Latihan Informatika</h1>
+        <p class="sub">Materi: Berpikir Komputasi</p>
+      </div>
+
+      <div class="timer-box">
+        <span class="timer-label">Sisa Waktu</span>
+        <span id="timer" class="timer">45:00</span>
+      </div>
+    </header>
+
+    <form id="quizForm">
+      <section class="card">
+        <h2 class="section-title">Identitas Siswa</h2>
+        <div class="grid">
+          <label>
+            Nama
+            <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required />
+          </label>
+
+          <label>
+            Kelas
+            <select id="kelas" name="kelas" required>
+              <option value="">Pilih kelas</option>
+              <option value="X">X</option>
+              <option value="XI">XI</option>
+              <option value="XII">XII</option>
+            </select>
+          </label>
+
+          <label>
+            No Absen
+            <input type="text" id="noAbsen" name="noAbsen" placeholder="Contoh: 12" required />
+          </label>
+        </div>
+      </section>
+
+      <div id="questions"></div>
+
+      <div class="submit-wrap">
+        <button type="submit" id="submitBtn">Submit</button>
+      </div>
+      <div class="note">Mode ujian aktif. Proses auto-submit berjalan saat waktu habis atau semua soal terjawab.</div>
+    </form>
+  </div>
+
+  <div id="lockOverlay" class="lock-overlay">
+    <div class="lock-box">
+      <h2>Mode Ujian Aktif</h2>
+      <p>
+        Halaman ujian sedang dipantau. Jangan keluar dari halaman ini selama mengerjakan.
+        Jika layar keluar dari mode penuh, sistem akan mengembalikannya secara otomatis.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Berpikir komputasi adalah proses ...",
+        options: [
+          "menghafal semua data tanpa analisis",
+          "memecahkan masalah secara logis dan sistematis dengan cara yang bisa dijalankan komputer",
+          "menggunakan komputer tanpa tujuan",
+          "mengubah data menjadi software",
+          "menulis algoritma tanpa memahami masalah"
+        ],
+        answer: "B"
+      },
+      {
+        question: "Pilar utama berpikir komputasi adalah ...",
+        options: [
+          "dekomposisi, pola, abstraksi, dan algoritma",
+          "keyboard, mouse, monitor, dan printer",
+          "hardware, software, user, dan jaringan",
+          "input, output, proses, dan penyimpanan",
+          "analisis, presentasi, evaluasi, dan publikasi"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Dekomposisi berarti ...",
+        options: [
+          "menggabungkan semua bagian menjadi satu",
+          "mencari pola yang sama",
+          "memecah masalah besar menjadi bagian-bagian kecil yang lebih mudah diselesaikan",
+          "menghilangkan semua variabel",
+          "menyusun data acak menjadi tabel"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Dalam kerja kelompok, dekomposisi berguna untuk ...",
+        options: [
+          "membuat semua orang bekerja sendiri",
+          "menghapus jadwal kerja",
+          "memecah tugas menjadi bagian yang dapat dikerjakan secara terpisah",
+          "membatasi komunikasi antaranggota",
+          "mengurangi kualitas kerja"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Pengenalan pola digunakan untuk ...",
+        options: [
+          "memilih informasi yang tidak penting",
+          "mengenali kesamaan atau tren dari data",
+          "mencari memori komputer",
+          "mematikan program",
+          "menyusun format teks"
+        ],
+        answer: "B"
+      },
+      {
+        question: "Abstraksi dalam berpikir komputasi artinya ...",
+        options: [
+          "menghapus semua data dari masalah",
+          "membuat masalah menjadi lebih rumit",
+          "memfokuskan pada bagian yang penting dan mengabaikan detail yang tidak relevan",
+          "membuat solusi tanpa langkah logis",
+          "menyalin cara orang lain tanpa memahami"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Algoritma adalah ...",
+        options: [
+          "kumpulan data yang tidak teratur",
+          "urutan langkah logis untuk menyelesaikan masalah",
+          "jenis perangkat keras komputer",
+          "sistem operasi terbaru",
+          "bentuk tabel hasil ujian"
+        ],
+        answer: "B"
+      },
+      {
+        question: "Manfaat utama berpikir komputasi adalah ...",
+        options: [
+          "membuat orang jadi malas berpikir",
+          "membantu memecahkan masalah secara logis dan sistematis",
+          "menghilangkan semua kebutuhan software",
+          "mengganti semua guru di sekolah",
+          "mempermudah proses menyalin jawaban"
+        ],
+        answer: "B"
+      },
+      {
+        question: "Contoh penerapan berpikir komputasi dalam kehidupan sehari-hari adalah ...",
+        options: [
+          "merencanakan rute perjalanan terbaik",
+          "menonton video tanpa tujuan",
+          "menggambar tanpa konsep",
+          "menggunakan handphone tanpa aplikasi",
+          "menghapus seluruh data penting"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Saat kita ingin menyelesaikan masalah besar, langkah yang tepat adalah ...",
+        options: [
+          "langsung menebak jawaban",
+          "membiarkan masalah berkembang sendiri",
+          "memecah masalah menjadi bagian kecil agar mudah ditangani",
+          "menghapus data penting",
+          "menyalin solusi dari teman tanpa memahami"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Dalam pemrograman, langkah awal yang paling tepat adalah ...",
+        options: [
+          "langsung menulis kode tanpa analisis",
+          "memahami masalah dan merancang solusi",
+          "menghapus file program lama",
+          "membeli perangkat baru",
+          "mengubah semua variabel"
+        ],
+        answer: "B"
+      },
+      {
+        question: "Pola dalam data dapat membantu kita ...",
+        options: [
+          "mengubah data menjadi angka acak",
+          "memastikan data tidak bisa dibaca",
+          "mengidentifikasi tren atau kesamaan yang berguna",
+          "menghapus semua informasi penting",
+          "mengganti semua perangkat keras"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Jika siswa akan membuat jadwal belajar, berpikir komputasi dapat membantu dengan ...",
+        options: [
+          "memilih waktu belajar yang efektif dan teratur",
+          "menyalin jadwal teman",
+          "mengganti semua mata pelajaran",
+          "menghapus kegiatan belajar",
+          "membatasi semua kegiatan"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Abstraksi sangat bermanfaat saat ...",
+        options: [
+          "membuat daftar semua detail yang tidak relevan",
+          "mengabaikan informasi penting",
+          "memilih informasi utama dari suatu masalah",
+          "menghapus semua keputusan",
+          "mengurangi semua langkah yang logis"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Langkah yang paling tepat setelah menemukan pola pada data adalah ...",
+        options: [
+          "menutup data tersebut",
+          "membuat generalisasi atau aturan sederhana",
+          "menghapus seluruh file",
+          "mengganti jenis data",
+          "mengabaikan hasil analisis"
+        ],
+        answer: "B"
+      },
+      {
+        question: "Salah satu ciri algoritma yang baik adalah ...",
+        options: [
+          "rumit dan sulit dipahami",
+          "tidak terstruktur",
+          "jelas, berurutan, dan dapat dijalankan",
+          "berisi campuran data acak",
+          "hanya dapat digunakan pada komputer tertentu"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Apa yang dimaksud dengan pengenalan pola dalam konteks berpikir komputasi?",
+        options: [
+          "menemukan kesamaan atau hubungan antar data",
+          "menghapus seluruh data agar lebih sederhana",
+          "mencatat semua kebutuhan tanpa analisis",
+          "menggunakan mesin tanpa tujuan",
+          "menyusun salinan data"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Mengapa berpikir komputasi penting di era digital?",
+        options: [
+          "karena setiap masalah modern memerlukan analisis yang logis dan sistematis",
+          "karena komputer tidak memerlukan data",
+          "karena semua pekerjaan bisa dilakukan tanpa pemikiran",
+          "karena teknologi tidak pernah berubah",
+          "karena hanya programmer yang membutuhkannya"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Dalam tim proyek, pembagian tugas dengan dekomposisi akan ...",
+        options: [
+          "membuat semua tugas menjadi tidak jelas",
+          "menghilangkan koordinasi antaranggota",
+          "mempermudah pengelolaan dan penyelesaian tugas",
+          "membuat tugas lebih berat",
+          "menghapus kebutuhan komunikasi"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Proses mencari dan memperbaiki kesalahan pada program disebut ...",
+        options: [
+          "dekomposisi",
+          "abstraksi",
+          "debugging",
+          "pengarsipan",
+          "pemformatan"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Jika program mengalami bug, langkah paling tepat adalah ...",
+        options: [
+          "menghapus program secara total",
+          "langsung menebak solusi tanpa mengecek",
+          "mencari penyebab kesalahan dan menguji ulang",
+          "mengubah semua nama file",
+          "mematikan komputer tanpa alasan"
+        ],
+        answer: "C"
+      },
+      {
+        question: "Penerapan berpikir komputasi dalam transportasi adalah ...",
+        options: [
+          "menggunakan aplikasi navigasi untuk mencari rute tercepat",
+          "membiarkan kendaraan berjalan tanpa perencanaan",
+          "menghapus semua rute",
+          "mengganti mesin kendaraan",
+          "mengurangi semua data lalu lintas"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Manfaat berpikir komputasi dalam belajar matematika adalah ...",
+        options: [
+          "mengganti guru",
+          "membantu menyusun strategi penyelesaian soal secara logis",
+          "membuat soal menjadi tidak relevan",
+          "menghilangkan belajar",
+          "mengurangi semua rumus"
+        ],
+        answer: "B"
+      },
+      {
+        question: "Dalam pembuatan game, berpikir komputasi dapat membantu ...",
+        options: [
+          "menghapus semua karakter game",
+          "merancang aturan, level, dan logika permainan",
+          "menutup aplikasi game",
+          "menyalakan game tanpa strategi",
+          "membuat semua tombol sama"
+        ],
+        answer: "B"
+      },
+      {
+        question: "Contoh abstraksi pada sistem sekolah adalah ...",
+        options: [
+          "focus pada jadwal, nilai, dan absensi yang relevan",
+          "mencatat semua detail kecil siswa tanpa filter",
+          "menghapus semua data sekolah",
+          "membuat semua kelas menjadi sama",
+          "mengurangi semua kegiatan belajar"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Saat memilih aplikasi belajar, berpikir komputasi membantu kita ...",
+        options: [
+          "membandingkan fitur, biaya, dan kebutuhan",
+          "mengunduh semua aplikasi yang tersedia",
+          "membeli produk tanpa alasan",
+          "mengabaikan kebutuhan belajar",
+          "menghapus semua catatan"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Jika data memiliki pola tertentu, kita dapat ...",
+        options: [
+          "membuat prediksi atau aturan umum",
+          "menghilangkan semua data",
+          "mengubah format data secara acak",
+          "membiarkan masalah tetap tak terpecahkan",
+          "membatasi semua aktivitas analisis"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Manakah yang bukan termasuk pilar berpikir komputasi?",
+        options: [
+          "visualisasi",
+          "dekomposisi",
+          "pengenalan pola",
+          "abstraksi",
+          "algoritma"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Penerapan berpikir komputasi dalam kesehatan dapat berupa ...",
+        options: [
+          "menganalisis data pasien untuk prediksi penyakit",
+          "mengganti dokter dengan mesin",
+          "membuang semua catatan medis",
+          "menulis resep tanpa data",
+          "menunggu tanpa evaluasi"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Salah satu manfaat berpikir komputasi dalam kehidupan sosial adalah ...",
+        options: [
+          "membantu membuat keputusan yang lebih rasional",
+          "membuat orang malas berpikir",
+          "menurunkan kreativitas",
+          "menambah stres",
+          "mengurangi komunikasi"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Dekomposisi dapat membantu dalam pemecahan masalah dengan cara ...",
+        options: [
+          "membuat tugas lebih mudah dikelola",
+          "menggabungkan semua masalah menjadi satu",
+          "menambah kebingungan",
+          "mempercepat tanpa logika",
+          "menghapus seluruh kendala"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Algoritma yang baik harus bersifat ...",
+        options: [
+          "terstruktur dan dapat diuji",
+          "tidak terdefinisi",
+          "sangat cepat tanpa benar",
+          "acak dan berubah-ubah",
+          "hanya dipahami oleh satu orang"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Jika kita menemukan pola yang sama dalam beberapa masalah, maka ...",
+        options: [
+          "kita dapat membuat solusi umum yang lebih efisien",
+          "semua masalah menjadi sama persis",
+          "kita tidak perlu menganalisis lagi",
+          "semua data harus dibuang",
+          "masalah tetap tidak dapat diselesaikan"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Pemecahan masalah dengan berpikir komputasi biasanya dimulai dengan ...",
+        options: [
+          "memahami masalah secara jelas",
+          "langsung menulis program tanpa rencana",
+          "menghapus semua data",
+          "menunggu instruksi dari orang lain",
+          "membeli perangkat baru"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Dalam pembelajaran, berpikir komputasi mendorong siswa untuk ...",
+        options: [
+          "berpikir logis dan sistematis",
+          "menyalin tanpa memahami",
+          "menghindari evaluasi",
+          "menebak tanpa alasan",
+          "menghafal tanpa proses"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Contoh penerapan algoritma dalam kehidupan sekolah adalah ...",
+        options: [
+          "membuat jadwal ujian sesuai urutan",
+          "menulis nama di papan tulis",
+          "memasang kabel jaringan",
+          "membuka kelas tanpa perencanaan",
+          "mengganti kursi siswa"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Manakah yang menunjukkan abstraksi?",
+        options: [
+          "memilih informasi penting dari laporan panjang",
+          "menulis semua nomor telepon tanpa menyaring",
+          "membuat tabel acak tanpa tujuan",
+          "menyimpan semua data dengan sembarang urutan",
+          "menambahkan detail yang tidak perlu"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Jika menghadapi masalah besar dalam proyek, cara berpikir komputasi yang paling tepat adalah ...",
+        options: [
+          "memecah masalah menjadi bagian kecil kemudian menyusun solusi",
+          "langsung menyerah",
+          "menambah semua tugas sekaligus",
+          "menghapus data proyek",
+          "menghindari semua keputusan"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Penerapan berpikir komputasi dalam e-commerce adalah ...",
+        options: [
+          "mengelola stok, rekomendasi, dan pembayaran secara efisien",
+          "menghapus semua pelanggan",
+          "menutup website",
+          "mengurangi promosi",
+          "menunda layanan"
+        ],
+        answer: "A"
+      },
+      {
+        question: "Keterampilan utama yang dikembangkan dari berpikir komputasi adalah ...",
+        options: [
+          "logika, analisis, dan pemecahan masalah",
+          "hanya menulis kode",
+          "hanya menggambar",
+          "hanya membaca buku",
+          "hanya menonton video"
+        ],
+        answer: "A"
+      }
+    ];
+
+    const totalTime = 45 * 60;
+    let timeLeft = totalTime;
+    let autoSubmitLocked = false;
+    let fullScreenRequested = false;
+
+    const timerEl = document.getElementById("timer");
+    const questionsWrap = document.getElementById("questions");
+    const quizForm = document.getElementById("quizForm");
+    const lockOverlay = document.getElementById("lockOverlay");
+
+    function renderQuestions() {
+      questions.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "question-card";
+
+        const choices = item.options.map((opt, i) => {
+          const letter = String.fromCharCode(65 + i);
+          return `
+            <label class="option">
+              <input type="radio" name="q${index + 1}" value="${letter}" required />
+              <span class="option-label">${letter}. ${opt}</span>
+            </label>
+          `;
+        }).join("");
+
+        card.innerHTML = `
+          <div class="q-head">
+            <div class="q-badge">Soal ${index + 1}</div>
+          </div>
+          <p class="question">${index + 1}. ${item.question}</p>
+          <div class="options">
+            ${choices}
+          </div>
+        `;
+        questionsWrap.appendChild(card);
+      });
+    }
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
+
+    function updateTimer() {
+      timerEl.textContent = formatTime(timeLeft);
+    }
+
+    function requestFullscreen() {
+      const docEl = document.documentElement;
+      if (!document.fullscreenElement && docEl.requestFullscreen) {
+        docEl.requestFullscreen().catch(() => {});
+      }
+    }
+
+    function showKioskOverlay() {
+      lockOverlay.classList.add("show");
+    }
+
+    function hideKioskOverlay() {
+      lockOverlay.classList.remove("show");
+    }
+
+    function countAnswered() {
+      let count = 0;
+      questions.forEach((_, idx) => {
+        const selected = document.querySelector(`input[name="q${idx + 1}"]:checked`);
+        if (selected) count++;
+      });
+      return count;
+    }
+
+    function sendToWhatsApp(message) {
+      const waLink = "https://wa.me/6287863539155?text=" + encodeURIComponent(message);
+      window.open(waLink, "_blank");
+    }
+
+    function autoSubmit() {
+      if (autoSubmitLocked) return;
+
+      const nama = document.getElementById("nama").value.trim();
+      const kelas = document.getElementById("kelas").value.trim();
+      const noAbsen = document.getElementById("noAbsen").value.trim();
+
+      if (!nama || !kelas || !noAbsen) {
+        return;
+      }
+
+      autoSubmitLocked = true;
+
+      let benar = 0;
+      let salah = 0;
+      let kosong = 0;
+
+      questions.forEach((item, idx) => {
+        const checked = document.querySelector(`input[name="q${idx + 1}"]:checked`);
+        if (!checked) {
+          kosong++;
+          return;
+        }
+
+        if (checked.value === item.answer) {
+          benar++;
+        } else {
+          salah++;
+        }
+      });
+
+      const nilai = Math.round((benar / questions.length) * 100);
+      const elapsed = totalTime - timeLeft;
+      const waktuPengerjaan = formatTime(elapsed);
+
+      const hasilText = [
+        "Format Hasil Ujian Informatika",
+        "",
+        `Nama: ${nama}`,
+        `Kelas: ${kelas}`,
+        `No Absen: ${noAbsen}`,
+        `Benar: ${benar}`,
+        `Salah: ${salah}`,
+        `Kosong: ${kosong}`,
+        `Nilai: ${nilai}%`,
+        `Waktu Pengerjaan: ${waktuPengerjaan}`,
+        "",
+        "Terima kasih."
+      ].join("\n");
+
+      sendToWhatsApp(hasilText);
+
+      setTimeout(() => {
+        alert("Hasil ujian telah dikirim otomatis ke WhatsApp guru pengajar.");
+      }, 400);
+    }
+
+    function checkAutoSubmitCondition() {
+      const answered = countAnswered();
+      if (answered === questions.length) {
+        autoSubmit();
+      }
+    }
+
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("dragstart", e => e.preventDefault());
+    document.addEventListener("selectstart", e => e.preventDefault());
+    document.addEventListener("copy", e => e.preventDefault());
+    document.addEventListener("cut", e => e.preventDefault());
+    document.addEventListener("paste", e => e.preventDefault());
+
+    document.addEventListener("keydown", function(e){
+      const blockedKeys = ["F11", "F12", "Escape", "Tab", "MetaLeft", "MetaRight", "AltLeft", "AltRight", "ControlLeft", "ControlRight"];
+      if (blockedKeys.includes(e.key)) {
+        e.preventDefault();
+        showKioskOverlay();
+        return false;
+      }
+
+      if (e.key === "F5") {
+        e.preventDefault();
+        showKioskOverlay();
+        return false;
+      }
+
+      if ((e.ctrlKey || e.metaKey) && ["c","v","x","p","u","s","t","w","n","r","l","i","k"].includes(e.key.toLowerCase())) {
+        e.preventDefault();
+        showKioskOverlay();
+        return false;
+      }
+
+      if (e.key === "PrintScreen") {
+        e.preventDefault();
+      }
+    });
+
+    document.addEventListener("visibilitychange", function() {
+      if (document.visibilityState === "hidden") {
+        showKioskOverlay();
+      } else {
+        hideKioskOverlay();
+        requestFullscreen();
+      }
+    });
+
+    window.addEventListener("blur", function () {
+      showKioskOverlay();
+      requestFullscreen();
+    });
+
+    window.addEventListener("focus", function () {
+      hideKioskOverlay();
+      requestFullscreen();
+    });
+
+    window.addEventListener("beforeunload", function (e) {
+      e.preventDefault();
+      e.returnValue = "";
+    });
+
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.addEventListener("change", function () {
+        checkAutoSubmitCondition();
+      });
+    });
+
+    const timerInterval = setInterval(() => {
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        autoSubmit();
+        return;
+      }
+
+      timeLeft--;
+      updateTimer();
+    }, 1000);
+
+    quizForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      autoSubmit();
+    });
+
+    renderQuestions();
+    updateTimer();
+    requestFullscreen();
+
+    setInterval(() => {
+      requestFullscreen();
+      if (document.visibilityState === "hidden") {
+        showKioskOverlay();
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
